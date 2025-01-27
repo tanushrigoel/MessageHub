@@ -5,6 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import "@/app/globals.css"
 import { useToast } from "@/hooks/use-toast";
 import { signIn } from "next-auth/react";
 import {
@@ -33,12 +34,13 @@ function page() {
   });
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    // console.log(data)
     const result = await signIn("credentials", {
       redirect: false,
       identifier: data.identifier,
       password: data.password,
     });
-    console.log(result);
+    // console.log(result);
     if (result?.error) {
       if (result.error == "CredentialsSignin") {
         toast.toast({

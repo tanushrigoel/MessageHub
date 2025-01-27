@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { signupSchema } from "@/schemas/signupSchema";
 import axios, { AxiosError } from "axios";
+import "@/app/globals.css"
 import { ApiResponse } from "@/types/Apiresponse";
 import {
   Form,
