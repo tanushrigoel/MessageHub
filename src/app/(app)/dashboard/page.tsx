@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { Loader2, RefreshCcw } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -20,6 +21,7 @@ function page() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
   const HandleDeleteMessage = (messageId: string) => {
     setMessages(
       messages.filter((message) => {
@@ -28,7 +30,20 @@ function page() {
     );
   };
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  // useEffect(() => {
+  //   if (status === "unauthenticated") {
+  //     router.replace("/sign-in");
+  //   }
+  // }, [status, router]);
+  // if(status==="unauthenticated") return <div>Access denied login please</div>
+
+  // if (status === "loading") return <div>Loading...</div>;
+
+  // if (status === "unauthenticated") {
+  //   return null; // Return null as we're redirecting
+  // }
 
   const form = useForm({ resolver: zodResolver(acceptMessageSchema) });
   const { register, watch, setValue } = form;
@@ -93,11 +108,16 @@ function page() {
 
   const handleSwitchChange = async () => {
     try {
+      // console.log("changes");
+
+      // console.log(!acceptMessages);
+
       const response = await axios.post<ApiResponse>("/api/accept-messages", {
         acceptMessages: !acceptMessages,
       });
       setValue("acceptMessages", !acceptMessages);
       toast({ title: response.data.message, variant: "default" });
+      // console.log(acceptMessages);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -109,9 +129,11 @@ function page() {
       });
     }
   };
-  console.log(session);
-  
+  // console.log(session);
 
+  // if(!session?.user){
+  //   router.replace("/sign-in")
+  // }
   const { username } = session?.user as User;
   // do more research
   const basUrl = `${window.location.protocol}//${window.location.host}`;

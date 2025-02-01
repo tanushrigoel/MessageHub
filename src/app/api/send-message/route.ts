@@ -7,6 +7,8 @@ export async function POST(req: Request) {
   const { username, content } = await req.json();
   try {
     const user = await UserModel.findOne({ username });
+    console.log("send message", user);
+    
     if (!user) {
       return Response.json(
         {
@@ -16,7 +18,7 @@ export async function POST(req: Request) {
         { status: 404 }
       );
     }
-    if (!user.isAcceptingMessage) {
+    if (!user.isAcceptingMessages) {
       return Response.json(
         {
           success: false,
