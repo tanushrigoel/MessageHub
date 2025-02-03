@@ -147,7 +147,7 @@ export const authOptions: NextAuthOptions = {
       name: "next-auth.session-token",
       options: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV,
         path: "/",
         sameSite: "lax",
         maxAge: 7 * 24 * 60 * 60,
